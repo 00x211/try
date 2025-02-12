@@ -1,0 +1,15 @@
+package com.example.rules
+
+import com.example.demo.model.SavedData;
+import java.time.LocalDate;
+
+rule "Filter by keyword and date range"
+    when
+        $data : SavedData(
+            saved_data contains "王者荣耀",
+            saved_date >= LocalDate.of(2025, 2, 11),
+            saved_date <= LocalDate.of(2025, 2, 12)
+        )
+    then
+        System.out.println("匹配到规则： " + $data);
+end
