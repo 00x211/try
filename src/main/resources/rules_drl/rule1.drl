@@ -1,4 +1,4 @@
-package com.example.rules
+package com.example.rules_drl
 
 import com.example.demo.model.SavedData;
 import java.time.LocalDate;
