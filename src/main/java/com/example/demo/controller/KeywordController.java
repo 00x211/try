@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController // 接口方法返回对象 转换为json文本
+@CrossOrigin
 @RequestMapping("/api/keywords")
 public class KeywordController {
     @Autowired

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 rule "Filter by keyword and date range"
     when
         $data : SavedData(
-            saved_data contains "王者荣耀",
+            saved_data contains "翠",
             saved_date >= LocalDate.of(2025, 2, 11),
             saved_date <= LocalDate.of(2025, 2, 12)
         )
