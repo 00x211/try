@@ -35,10 +35,22 @@ package com.example.demo.controller;
 import com.example.demo.model.Rule;
 import com.example.demo.model.SavedData;
 import com.example.demo.service.RuleService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.io.IOException;
+
+@Setter
+@Getter
+class ApplyRuleRequest {
+    // Getter 和 Setter
+    private String dataName;
+    private String ruleName;
+
+}
 
 @RestController
 @CrossOrigin
@@ -48,7 +60,7 @@ public class RuleController {
     private RuleService ruleService;
 
     @PostMapping
-    public Rule addRule(@RequestBody Rule rule) {
+    public Rule addRule(@RequestBody Rule rule) throws IOException{
         return ruleService.addRule(rule);
     }
 
@@ -71,8 +83,9 @@ public class RuleController {
     public Rule getRuleByName(@PathVariable String ruleName) {
         return ruleService.getRuleByName(ruleName);
     }
+
     @PostMapping("/apply")
-    public List<SavedData> applyRule(@RequestBody String ruleName, @RequestBody List<SavedData> dataList) {
-        return ruleService.applyRule(ruleName, dataList);
+    public List<SavedData> applyRule(@RequestBody ApplyRuleRequest ruleRequest) {
+        return ruleService.applyRule(ruleRequest.getDataName(), ruleRequest.getRuleName());
     }
 }

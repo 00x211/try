@@ -28,4 +28,13 @@ public class FilterController {
             @RequestParam("keywords") List<String> keywords){
         return filterService.filterDataByKeywords_or(dataName, keywords);
     }
+
+    @GetMapping("/filter-by-rule")
+    public List<Map<String, Object>> filtedData_byRule(
+            @RequestParam(value = "dataName", required = false) String dataName,
+            @RequestParam("logic") String logic,
+            @RequestParam("keywords") List<String> keywords
+    ){
+        return filterService.filterDataByRule(dataName, logic, keywords);
+    }
 }

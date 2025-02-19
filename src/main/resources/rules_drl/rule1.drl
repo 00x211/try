@@ -3,13 +3,15 @@ package com.example.rules_drl
 import com.example.demo.model.SavedData;
 import java.time.LocalDate;
 
+global java.util.List<SavedData> result
+
 rule "Filter by keyword and date range"
     when
         $data : SavedData(
-            saved_data contains "翠",
-            saved_date >= LocalDate.of(2025, 2, 11),
-            saved_date <= LocalDate.of(2025, 2, 12)
+            saved_data matches "(?s).*抖音.*",
+            saved_data not contains "情书"
         )
     then
-        System.out.println("匹配到规则： " + $data);
+        System.out.println("匹配到规则,这是rule1的内容： " + $data);
+        result.add($data);
 end

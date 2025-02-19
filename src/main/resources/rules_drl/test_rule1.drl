@@ -1,0 +1,17 @@
+package rules_drl
+
+import java.time.LocalDate;
+import com.example.demo.model.SavedData;
+
+global java.util.List<SavedData> result
+
+rule "筛选包含抖音或tiktok 以及流量的数据"
+    when
+        $data : SavedData(
+            saved_data matches "(?s).*(抖音|tiktok).*",
+            saved_data matches "(?s).*(流量).*"
+        )
+    then
+        System.out.println("匹配到数据，这是test_rule的内容: " + $data.getSaved_data());
+        result.add($data);
+end
