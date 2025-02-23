@@ -136,17 +136,32 @@ public class RuleController {
     }
     @Autowired
     private RuleStatisticsRepository ruleStatisticsRepository;
-    // 统计信息
+    // 获取全部的统计信息
     @GetMapping("/statistics")
     public List<RuleStatistics> getRuleStatistics() {
         return ruleStatisticsRepository.findAll();
+    }
+    // 删除选定的筛选结果和条目
+    @DeleteMapping("/statistics/{id}")
+    public void deleteRuleStatistics(@PathVariable Long id) {
+//        ruleStatisticsRepository.deleteById(id);
+        // 根据 id 查询 RuleStatistics 记录
+        ruleStatisticsRepository.findById(id).ifPresent(ruleStatistics -> {
+            String tableName = ruleStatistics.getTableName();
+            // 构建删除表的 SQL 语句
+            String dropTableSql = "DROP TABLE IF EXISTS `" + tableName + "`";
+            // 执行删除表的操作
+            jdbcTemplate.execute(dropTableSql);
+            // 删除 ruleStatistics 表中的记录
+            ruleStatisticsRepository.deleteById(id);
+        });
     }
     // 展开数据的过程
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @GetMapping("/filtered_result")
     public List<Map<String, Object>> zhankai(@RequestParam String tableName){
-        String sql = "SELECT * FROM " + tableName;
+        String sql = "SELECT * FROM `" + tableName + "`";
         return jdbcTemplate.query(sql, (ResultSet rs, int rowNum) -> {
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();

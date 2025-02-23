@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -96,10 +97,10 @@ public class Rule_RegexService {
                 .orElseThrow(() -> new RuntimeException("规则不存在: " + ruleName));
 
         // 获取目标数据表的原始数据数目
-        int originCounts = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM " + dataName, Integer.class);
+        int originCounts = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM `" + dataName + "`", Integer.class);
 
         // 构建查询条件
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM " + dataName + " WHERE saved_data REGEXP ");
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM `" + dataName + "` WHERE saved_data REGEXP ");
         List<String> regexs = rule.getRegex();
         for(int i = 0; i < regexs.size(); i++) {
             queryBuilder.append(regexs.get(i));
@@ -119,7 +120,7 @@ public class Rule_RegexService {
 
         // 创建新表存储筛选结果
         String filteredTableName = "filtered_by_" + ruleName + "_on_" + dataName + "_" + System.currentTimeMillis();
-        jdbcTemplate.execute("CREATE TABLE " + filteredTableName + " AS " + queryBuilder.toString());
+        jdbcTemplate.execute("CREATE TABLE `" + filteredTableName + "` AS " + queryBuilder.toString());
 
         // 获取筛选出的数据数目
         int counts = filteredData.size();
