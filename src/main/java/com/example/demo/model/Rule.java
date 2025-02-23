@@ -1,3 +1,6 @@
+// 这是基于drl文件的可以进行查询的规则表
+// id，规则名称，描述，与逻辑，非逻辑，创建时间，更新时间
+
 package com.example.demo.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;

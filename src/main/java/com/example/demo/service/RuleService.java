@@ -36,7 +36,7 @@ import org.kie.internal.io.ResourceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -69,6 +69,26 @@ public class RuleService {
     }
 
     public void deleteRule(Long id) {
+        // 先删除对应的drl文件，再删除条目
+        // 先根据 id 查询规则名
+        String ruleName = ruleRepository.findById(id).get().getRuleName();
+        if (ruleName != null) {
+            // 构建 DRL 文件的路径
+            String drlFilePath = "src/main/resources/rules_drl/" + ruleName + ".drl";
+            File drlFile = new File(drlFilePath);
+
+            // 删除 DRL 文件
+            if (drlFile.exists()) {
+                if (drlFile.delete()) {
+                    System.out.println("DRL 文件删除成功: " + drlFilePath);
+                } else {
+                    System.err.println("DRL 文件删除失败: " + drlFilePath);
+                }
+            } else {
+                System.err.println("DRL 文件不存在: " + drlFilePath);
+            }
+        }
+        // 再删除条目
         ruleRepository.deleteById(id);
     }
 
@@ -160,8 +180,8 @@ public class RuleService {
         }
         kieSession.fireAllRules();
         kieSession.dispose();
-//        createFilteredTable(ruleName, dataName);
-//        saveFilteredData(ruleName, dataName, result);
+        createFilteredTable(ruleName, dataName);
+        saveFilteredData(ruleName, dataName, result);
 
         return result;
     }

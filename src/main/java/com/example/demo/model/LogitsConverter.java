@@ -1,3 +1,5 @@
+// 适配drl规则的方法转换，二维列表存储在数据库中的方案
+
 package com.example.demo.model;
 import jakarta.persistence.AttributeConverter;
 import com.fasterxml.jackson.core.JsonProcessingException;

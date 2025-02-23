@@ -25,14 +25,6 @@ public class RuleGenerator {
             return "没有规则内容，创建失败。";
         }
 
-        // 检查最后一行是否以逗号结尾
-        String currentContent = drlBuilder.toString();
-        int lastNewLineIndex = currentContent.lastIndexOf('\n');
-        if (lastNewLineIndex != -1 && currentContent.charAt(lastNewLineIndex - 1) == ',') {
-            // 删除最后一个逗号
-            drlBuilder.deleteCharAt(lastNewLineIndex - 1);
-        }
-
         drlBuilder.append("        $data : SavedData(\n");
         // 下面是常规的字符串添加方案，没有使用正则表达
 //        if(!and_logits.isEmpty()) {
@@ -86,7 +78,15 @@ public class RuleGenerator {
             drlBuilder.append(String.format("            saved_date >= LocalDate.of(%d, %d, %d),\n", start.getYear(), start.getMonthValue(), start.getDayOfMonth()));
         }
         if(end != null){
-            drlBuilder.append(String.format("            saved_date >= LocalDate.of(%d, %d, %d)\n", end.getYear(), end.getMonthValue(), end.getDayOfMonth()));
+            drlBuilder.append(String.format("            saved_date <= LocalDate.of(%d, %d, %d)\n", end.getYear(), end.getMonthValue(), end.getDayOfMonth()));
+        }
+
+        // 检查最后一行是否以逗号结尾
+        String currentContent = drlBuilder.toString();
+        int lastNewLineIndex = currentContent.lastIndexOf('\n');
+        if (lastNewLineIndex != -1 && currentContent.charAt(lastNewLineIndex - 1) == ',') {
+            // 删除最后一个逗号
+            drlBuilder.deleteCharAt(lastNewLineIndex - 1);
         }
 
         drlBuilder.append("        )\n");
