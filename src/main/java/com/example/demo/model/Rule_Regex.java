@@ -24,7 +24,7 @@ public class Rule_Regex {
     @Column
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2048)
     @Convert(converter = ListConverter.class)
     private List<String> regex;
 

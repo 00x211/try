@@ -103,7 +103,17 @@ public class Rule_RegexService {
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM `" + dataName + "` WHERE saved_data REGEXP ");
         List<String> regexs = rule.getRegex();
         for(int i = 0; i < regexs.size(); i++) {
-            queryBuilder.append(regexs.get(i));
+//            queryBuilder.append(regexs.get(i));
+//            if(i != regexs.size() - 1) {
+//                queryBuilder.append(" AND saved_data REGEXP ");
+//            }
+            String regex = regexs.get(i);
+            // 判断是否以单引号开头和结尾
+            if (regex.startsWith("'") && regex.endsWith("'")) {
+                queryBuilder.append(regex);
+            } else {
+                queryBuilder.append("'").append(regex).append("'");
+            }
             if(i != regexs.size() - 1) {
                 queryBuilder.append(" AND saved_data REGEXP ");
             }
